@@ -82,7 +82,19 @@ function normalizarGoles(match) {
 
 // Todos los partidos de hoy (todas las competencias del plan gratuito)
 export async function getMatchesHoy() {
-  const data = await apiFetch('/matches')
+  // Pedimos desde ayer hasta mañana para tener más contenido (partidos recientes y próximos)
+  const hoy = new Date()
+  const ayer = new Date(hoy)
+  ayer.setDate(ayer.getDate() - 1)
+  const manana = new Date(hoy)
+  manana.setDate(manana.getDate() + 1)
+
+  const fDesde = ayer.toISOString().split('T')[0]
+  const fHasta = manana.toISOString().split('T')[0]
+
+  const data = await apiFetch(`/matches?dateFrom=${fDesde}&dateTo=${fHasta}`)
+
+  // Devolvemos todos (ayer, hoy y mañana) para que la pantalla no quede vacía
   return data.matches.map(normalizarPartido)
 }
 
