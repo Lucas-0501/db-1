@@ -1,7 +1,5 @@
 const API_KEY = import.meta.env.VITE_FOOTBALL_DATA_KEY
-const BASE_URL = import.meta.env.DEV
-  ? '/football-api'
-  : 'https://api.football-data.org/v4'
+const BASE_URL = '/football-api'
 
 export const COMPETITIONS = [
   { code: 'PL',  nombre: 'Premier League',  pais: 'Inglaterra',   emblem: 'https://crests.football-data.org/PL.png' },

@@ -1,0 +1,10 @@
+[[redirects]]
+  from = "/football-api/*"
+  to = "https://api.football-data.org/v4/:splat"
+  status = 200
+  force = true
+  
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
