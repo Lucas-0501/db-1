@@ -9,10 +9,10 @@ export default function SelectorLiga({ onSelect, selectedComp }) {
           <button
             key={comp.code}
             onClick={() => onSelect(comp)}
-            className={`shrink-0 flex items-center gap-2.5 rounded-full px-5 py-2.5 transition-all duration-300 ${
+            className={`shrink-0 flex items-center gap-2.5 rounded-full px-5 py-2.5 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.95] ${
               isSelected
-                ? 'glass-dark scale-105 shadow-md'
-                : 'glass-light hover:bg-white/80 hover:scale-105 text-gray-700'
+                ? 'bg-[#013535] text-white shadow-lg scale-[1.02]'
+                : 'bg-white border border-black/5 text-zinc-600 hover:bg-zinc-50 hover:scale-[1.02] shadow-sm'
             }`}
           >
             <div className="w-7 h-7 rounded-full bg-white flex items-center justify-center shadow-sm overflow-hidden shrink-0 p-1">

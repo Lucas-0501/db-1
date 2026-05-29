@@ -168,7 +168,7 @@ export default function MundialProde({ user }) {
           <button 
             onClick={handleSync}
             disabled={syncing}
-            className="mt-4 md:mt-0 bg-[#A2FF00]/10 text-[#A2FF00] font-black uppercase text-xs tracking-widest py-2.5 px-5 rounded-xl border border-[#A2FF00]/30 hover:bg-[#A2FF00] hover:text-black hover:shadow-[0_0_20px_rgba(162,255,0,0.5)] transition-all flex items-center gap-2 disabled:opacity-50"
+            className="mt-4 md:mt-0 bg-[#A2FF00]/10 text-[#A2FF00] font-black uppercase text-xs tracking-widest py-2.5 px-5 rounded-xl border border-[#A2FF00]/30 hover:bg-[#A2FF00] hover:text-black hover:shadow-[0_0_20px_rgba(162,255,0,0.5)] transition-[transform,color,background-color,box-shadow] duration-200 ease-[var(--ease-out-emil)] active:scale-[0.97] flex items-center gap-2 disabled:opacity-50"
           >
             {syncing ? (
               <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
@@ -190,7 +190,7 @@ export default function MundialProde({ user }) {
           <p className="text-gray-300 font-medium">Aún no hay datos de grupos del Mundial disponibles.</p>
         </div>
       ) : (
-        gruposSimulados.map(grupo => {
+        gruposSimulados.map((grupo, grupoIndex) => {
           // Filtrar los partidos que pertenecen a este grupo
           const partidosDelGrupo = partidos.filter(p => {
             const isLocal = grupo.table.some(t => t.team.name === p.equipo_local)
@@ -203,7 +203,7 @@ export default function MundialProde({ user }) {
           })
 
           return (
-            <div key={grupo.groupName} className="bg-black/40 backdrop-blur-xl rounded-3xl border border-zinc-800 overflow-hidden shadow-2xl mb-8 mx-4 md:mx-0">
+            <div key={grupo.groupName} className="bg-black/40 backdrop-blur-xl rounded-3xl border border-zinc-800 overflow-hidden shadow-2xl mb-8 mx-4 md:mx-0 opacity-0 animate-stagger-fade" style={{ animationDelay: `${grupoIndex * 100}ms` }}>
               <div className="bg-zinc-950 px-6 py-4 flex justify-between items-center border-b border-zinc-800">
                 <h3 className="text-xl font-black text-white tracking-widest uppercase">{grupo.groupName?.replace('GROUP ', 'GRUPO ')}</h3>
                 <span className="bg-[#00F0FF] text-black text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full">
@@ -218,13 +218,13 @@ export default function MundialProde({ user }) {
                   {partidosDelGrupo.length === 0 ? (
                     <p className="text-zinc-500 text-sm italic py-4">No hay partidos cargados en tu base de datos para los equipos de este grupo.</p>
                   ) : (
-                    partidosDelGrupo.map(p => {
+                    partidosDelGrupo.map((p, index) => {
                       const isLocked = p.estado !== 'programado'
                       const hasVoted = p.prediccion_usuario != null
                       const isSaving = savingId === p.id
 
                       return (
-                        <div key={p.id} className="bg-zinc-900/50 hover:bg-zinc-800 rounded-2xl p-4 border border-zinc-800 flex flex-col md:flex-row items-center gap-4 justify-between transition-colors">
+                        <div key={p.id} className="bg-zinc-900/50 hover:bg-zinc-800 rounded-2xl p-4 border border-zinc-800 flex flex-col md:flex-row items-center gap-4 justify-between transition-colors duration-200 ease-[var(--ease-out-emil)] opacity-0 animate-stagger-fade" style={{ animationDelay: `${grupoIndex * 100 + 150 + Math.min(index * 40, 600)}ms` }}>
                           {/* Info Partido */}
                           <div className="flex-1 text-center md:text-left w-full">
                             <div className="text-[10px] font-black uppercase tracking-widest text-[#00F0FF] mb-2">
@@ -260,14 +260,14 @@ export default function MundialProde({ user }) {
                                   type="number" min="0"
                                   value={inputs[p.id]?.local ?? ''}
                                   onChange={(e) => handleInput(p.id, 'local', e.target.value)}
-                                  className="w-12 h-12 text-center text-xl font-black text-white bg-zinc-800 rounded-lg border border-transparent focus:border-[#00F0FF] outline-none transition-all placeholder:text-gray-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  className="w-12 h-12 text-center text-xl font-black text-white bg-zinc-800 rounded-lg border border-transparent focus:border-[#00F0FF] outline-none transition-colors duration-150 ease-[var(--ease-out-emil)] placeholder:text-gray-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 />
                                 <span className="text-zinc-600 font-black">-</span>
                                 <input 
                                   type="number" min="0"
                                   value={inputs[p.id]?.visitante ?? ''}
                                   onChange={(e) => handleInput(p.id, 'visitante', e.target.value)}
-                                  className="w-12 h-12 text-center text-xl font-black text-white bg-zinc-800 rounded-lg border border-transparent focus:border-[#00F0FF] outline-none transition-all placeholder:text-gray-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                  className="w-12 h-12 text-center text-xl font-black text-white bg-zinc-800 rounded-lg border border-transparent focus:border-[#00F0FF] outline-none transition-colors duration-150 ease-[var(--ease-out-emil)] placeholder:text-gray-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 />
                               </>
                             )}
@@ -286,7 +286,7 @@ export default function MundialProde({ user }) {
                               <button 
                                 onClick={() => handleSave(p.id)}
                                 disabled={isSaving || inputs[p.id]?.local === '' || inputs[p.id]?.visitante === ''}
-                                className="w-full md:w-auto md:min-w-[110px] bg-[#00F0FF] text-black font-black py-2 px-4 rounded-lg disabled:opacity-50 hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] text-xs uppercase transition-all"
+                                className="w-full md:w-auto md:min-w-[110px] bg-[#00F0FF] text-black font-black py-2 px-4 rounded-lg disabled:opacity-50 hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] text-xs uppercase transition-[transform,background-color,box-shadow,color] duration-200 ease-[var(--ease-out-emil)] active:scale-[0.97]"
                               >
                                 {isSaving ? '...' : (hasVoted ? 'Actualizar' : 'Guardar')}
                               </button>

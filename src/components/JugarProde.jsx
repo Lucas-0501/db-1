@@ -122,18 +122,18 @@ export default function JugarProde({ user }) {
 
       {/* Contenedor Central del Prode */}
       <div className="animate-fade-in space-y-4 relative z-10">
-      <div className="glass-light p-6 rounded-3xl mb-6 shadow-md border border-white/50 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-white p-6 rounded-[2rem] mb-6 shadow-sm border border-black/5 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-black text-[#013535] tracking-tight">Jugar al Prode</h2>
-          <p className="text-[#024a4a] text-sm mt-1">Ingresa tus predicciones para los próximos partidos.</p>
+          <h2 className="text-3xl font-black text-zinc-900 tracking-tight">Jugar al Prode</h2>
+          <p className="text-zinc-500 text-sm mt-1 font-medium">Ingresá tus predicciones para los próximos partidos.</p>
         </div>
         
         {/* Controles de Sincronización API -> Supabase */}
-        <div className="flex items-center gap-3 bg-white/40 p-2 rounded-2xl shadow-inner border border-white/60 w-full md:w-auto">
+        <div className="flex items-center gap-3 bg-zinc-50 p-2 rounded-2xl shadow-inner border border-black/5 w-full md:w-auto">
           <button 
             onClick={handleSync}
             disabled={syncing}
-            className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white font-bold py-2 px-4 rounded-xl hover:shadow-lg transition-all disabled:opacity-50 text-sm whitespace-nowrap flex items-center gap-2"
+            className="bg-[#013535] text-white font-bold py-2.5 px-5 rounded-[1rem] hover:shadow-lg transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.97] disabled:opacity-50 text-sm whitespace-nowrap flex items-center gap-2"
           >
             {syncing ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -151,42 +151,42 @@ export default function JugarProde({ user }) {
           const isSaving = savingId === p.id
 
           return (
-            <div key={p.id} className="glass-light rounded-2xl p-5 shadow-sm border border-white/40 flex flex-col md:flex-row items-center gap-4 justify-between transition-transform hover:scale-[1.01]">
+            <div key={p.id} className="bg-white rounded-[2rem] p-6 shadow-sm border border-black/5 flex flex-col md:flex-row items-center gap-6 justify-between transition-transform hover:scale-[1.01]">
               
               {/* Info Partido */}
               <div className="flex-1 text-center md:text-left">
-                <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#024a4a] bg-white/50 px-2 py-0.5 rounded-md">
+                <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 bg-zinc-100 px-3 py-1 rounded-full">
                     {new Date(p.fecha).toLocaleDateString()}
                   </span>
                   {p.liga && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-teal-800 bg-teal-100/50 px-2 py-0.5 rounded-md">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-teal-700 bg-teal-50 border border-teal-100 px-3 py-1 rounded-full">
                       {p.liga}
                     </span>
                   )}
                 </div>
                 
-                <div className="flex items-center justify-center md:justify-start gap-3 mt-2">
-                  <div className="flex items-center gap-2 w-[120px] justify-end">
-                    <span className="font-bold text-gray-800 text-lg truncate">{p.equipo_local}</span>
-                    {p.escudo_local && <img src={p.escudo_local} alt={p.equipo_local} className="w-8 h-8 object-contain" />}
+                <div className="flex items-center justify-center md:justify-start gap-4 mt-2">
+                  <div className="flex items-center gap-3 w-[140px] justify-end">
+                    <span className="font-bold text-zinc-800 text-lg truncate">{p.equipo_local}</span>
+                    {p.escudo_local && <img src={p.escudo_local} alt={p.equipo_local} className="w-10 h-10 object-contain" />}
                   </div>
-                  <span className="text-gray-400 text-sm font-bold">VS</span>
-                  <div className="flex items-center gap-2 w-[120px] justify-start">
-                    {p.escudo_visitante && <img src={p.escudo_visitante} alt={p.equipo_visitante} className="w-8 h-8 object-contain" />}
-                    <span className="font-bold text-gray-800 text-lg truncate">{p.equipo_visitante}</span>
+                  <span className="text-zinc-300 text-sm font-black">VS</span>
+                  <div className="flex items-center gap-3 w-[140px] justify-start">
+                    {p.escudo_visitante && <img src={p.escudo_visitante} alt={p.equipo_visitante} className="w-10 h-10 object-contain" />}
+                    <span className="font-bold text-zinc-800 text-lg truncate">{p.equipo_visitante}</span>
                   </div>
                 </div>
               </div>
 
               {/* Controles de Predicción */}
-              <div className="flex items-center gap-3 bg-white/40 p-2 rounded-2xl shadow-inner border border-white/50">
+              <div className="flex items-center gap-3 bg-zinc-50 p-3 rounded-2xl shadow-inner border border-black/5">
                 {isLocked ? (
                   <div className="flex flex-col items-center min-w-[80px]">
-                    <span className={`text-[10px] font-bold uppercase tracking-wider ${p.estado === 'en_curso' ? 'text-green-600 animate-pulse' : 'text-red-500'}`}>
+                    <span className={`text-[10px] font-bold uppercase tracking-widest ${p.estado === 'en_curso' ? 'text-red-500 animate-pulse' : 'text-zinc-400'}`}>
                       {p.estado === 'en_curso' ? 'En Vivo' : 'Finalizado'}
                     </span>
-                    <span className="font-black text-2xl text-[#013535]">
+                    <span className="font-black text-3xl tabular-nums tracking-tighter text-zinc-900 mt-1">
                       {p.goles_local_reales ?? '-'} - {p.goles_visitante_reales ?? '-'}
                     </span>
                   </div>
@@ -198,16 +198,16 @@ export default function JugarProde({ user }) {
                       value={inputs[p.id]?.local ?? ''}
                       onChange={(e) => handleInput(p.id, 'local', e.target.value)}
                       placeholder="0"
-                      className="w-14 h-14 text-center text-2xl font-black text-[#013535] bg-white rounded-xl shadow-sm border-0 focus:ring-4 focus:ring-teal-500/30 outline-none transition-all placeholder:text-gray-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="w-16 h-16 text-center text-3xl font-black text-[#013535] bg-white rounded-xl shadow-sm border border-black/5 focus:border-[#013535] outline-none transition-all placeholder:text-zinc-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
-                    <span className="text-teal-900/40 font-black text-xl">-</span>
+                    <span className="text-zinc-300 font-black text-xl">-</span>
                     <input 
                       type="number" 
                       min="0"
                       value={inputs[p.id]?.visitante ?? ''}
                       onChange={(e) => handleInput(p.id, 'visitante', e.target.value)}
                       placeholder="0"
-                      className="w-14 h-14 text-center text-2xl font-black text-[#013535] bg-white rounded-xl shadow-sm border-0 focus:ring-4 focus:ring-teal-500/30 outline-none transition-all placeholder:text-gray-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="w-16 h-16 text-center text-3xl font-black text-[#013535] bg-white rounded-xl shadow-sm border border-black/5 focus:border-[#013535] outline-none transition-all placeholder:text-zinc-200 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     />
                   </>
                 )}
@@ -216,10 +216,10 @@ export default function JugarProde({ user }) {
               {/* Botón Guardar / Estado */}
               <div className="w-full md:w-auto shrink-0 flex justify-center">
                 {isLocked ? (
-                  <div className="text-center px-4 bg-white/30 rounded-xl py-2">
+                  <div className="text-center px-5 bg-zinc-50 rounded-2xl py-3 border border-black/5">
                     {p.estado === 'en_curso' && <p className="text-[10px] font-bold text-red-500 uppercase mb-1">Predicciones Cerradas</p>}
-                    <p className="text-xs font-bold text-gray-500 uppercase">Tu Predicción</p>
-                    <p className="font-bold text-[#013535] text-lg">
+                    <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">Tu Voto</p>
+                    <p className="font-black text-zinc-900 text-xl tabular-nums mt-1">
                       {hasVoted ? `${p.prediccion_usuario.goles_local_predichos} - ${p.prediccion_usuario.goles_visitante_predichos}` : 'No votaste'}
                     </p>
                   </div>
@@ -227,10 +227,9 @@ export default function JugarProde({ user }) {
                   <button 
                     onClick={() => handleSave(p.id)}
                     disabled={isSaving || inputs[p.id]?.local === '' || inputs[p.id]?.visitante === ''}
-                    className="relative group overflow-hidden w-full md:w-[140px] bg-gradient-to-br from-[#013535] to-[#024a4a] text-white font-bold py-3 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-[0_8px_20px_-6px_rgba(1,53,53,0.5)] hover:-translate-y-0.5 flex items-center justify-center border border-white/10"
+                    className="relative group overflow-hidden w-full md:w-[140px] bg-zinc-900 text-white font-bold py-4 px-6 rounded-2xl transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.95] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-zinc-800 flex items-center justify-center border border-white/10"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-teal-400/0 via-teal-400/20 to-teal-400/0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
-                    <span className="relative z-10 tracking-wide text-sm">{isSaving ? 'Guardando...' : (hasVoted ? 'Actualizar' : 'Guardar')}</span>
+                    <span className="relative z-10 tracking-widest text-xs uppercase">{isSaving ? 'Guardando...' : (hasVoted ? 'Actualizar' : 'Guardar')}</span>
                   </button>
                 )}
               </div>

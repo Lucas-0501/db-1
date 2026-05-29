@@ -17,9 +17,9 @@ export default function PartidosHoy({ onSelectPartido }) {
   if (error)   return <p className="text-red-600 text-center py-8 text-sm">{error}</p>
 
   if (!partidos.length) return (
-    <div className="text-center py-12 glass-light rounded-2xl">
-      <p className="text-[#013535] font-semibold text-lg">No hay partidos hoy.</p>
-      <p className="text-[#024a4a] text-sm mt-1">Explorá las ligas en la parte superior para ver resultados y posiciones.</p>
+    <div className="text-center py-16 bg-white border border-black/5 shadow-sm rounded-[2rem]">
+      <p className="text-zinc-800 font-bold text-xl">No hay partidos destacados hoy.</p>
+      <p className="text-zinc-500 text-sm mt-2 font-medium">Explorá las ligas en la parte superior para ver resultados y posiciones.</p>
     </div>
   )
 
@@ -63,23 +63,25 @@ export default function PartidosHoy({ onSelectPartido }) {
       </div>
 
       {/* Contenedor Central de Partidos */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 relative z-10">
-        {ordenados.map(([code, liga]) => (
-          <div key={code} className="glass-light rounded-3xl overflow-hidden flex flex-col shadow-lg">
-            <div className="px-5 py-3 glass-dark flex items-center gap-3">
-              {liga.emblem && (
-                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center p-1 shrink-0">
-                  <img src={liga.emblem} className="w-full h-full object-contain" alt="" />
-                </div>
-              )}
-              <h3 className="text-white font-bold text-sm tracking-wide">
-                {liga.nombre}
-              </h3>
-            </div>
-            <div className="divide-y divide-gray-200/50 flex-grow bg-white/40 backdrop-blur-md">
-              {liga.partidos.map((p) => (
-                <PartidoRow key={p.fixture.id} p={p} onSelect={onSelectPartido} />
-              ))}
+      <div className="max-w-4xl mx-auto w-full flex flex-col space-y-8 relative z-10">
+        {ordenados.map(([code, liga], i) => (
+          <div key={code} className="stitch-card flex flex-col p-8 animate-stagger-fade" style={{ animationDelay: `${i * 150}ms` }}>
+            <div className="flex flex-col flex-grow">
+              <div className="pb-6 border-b border-black/5 flex items-center gap-4">
+                {liga.emblem && (
+                  <div className="w-8 h-8 rounded-full bg-zinc-50 flex items-center justify-center p-1.5 border border-black/5 shrink-0">
+                    <img src={liga.emblem} className="w-full h-full object-contain" alt="" />
+                  </div>
+                )}
+                <h3 className="text-zinc-900 font-bold text-sm tracking-wide">
+                  {liga.nombre}
+                </h3>
+              </div>
+              <div className="divide-y divide-black/5 flex-grow bg-white mt-2">
+                {liga.partidos.map((p) => (
+                  <PartidoRow key={p.fixture.id} p={p} onSelect={onSelectPartido} />
+                ))}
+              </div>
             </div>
           </div>
         ))}
@@ -122,38 +124,38 @@ function PartidoRow({ p, onSelect }) {
   return (
     <button
       onClick={() => onSelect(p.fixture.id)}
-      className="w-full px-5 py-4 hover:bg-white/40 transition-colors group"
+      className="w-full px-6 py-5 hover:bg-zinc-50 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:bg-zinc-100 group"
     >
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3 flex-1 justify-end">
-          <span className="text-gray-900 font-semibold text-sm text-right leading-tight group-hover:text-[#013535]">
+          <span className="text-zinc-600 font-bold text-sm text-right leading-tight group-hover:text-zinc-900 transition-colors">
             {p.teams.home.name}
           </span>
-          <img src={p.teams.home.logo} className="w-8 h-8 object-contain shrink-0 drop-shadow-sm" alt="" />
+          <img src={p.teams.home.logo} className="w-8 h-8 object-contain shrink-0" alt="" />
         </div>
 
         <div className="flex flex-col items-center min-w-[90px] shrink-0">
           {p.fixture.status.short === 'NS' ? (
-            <span className="text-[#024a4a] text-sm font-bold">{hora}</span>
+            <span className="text-zinc-400 text-sm font-bold tabular-nums">{hora}</span>
           ) : (
-            <span className="text-[#013535] font-black text-2xl tabular-nums tracking-tighter">
+            <span className="text-zinc-900 font-black text-3xl tabular-nums tracking-tighter leading-none">
               {golesLocal} – {golesVisit}
             </span>
           )}
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mt-1 ${
+          <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mt-2 ${
             vivo
-              ? 'bg-red-500 text-white animate-pulse shadow-md'
+              ? 'bg-emerald-50 text-emerald-600 border border-emerald-100 animate-pulse'
               : p.fixture.status.short === 'FT'
-                ? 'bg-gray-200 text-gray-700'
-                : 'bg-[#013535] text-white'
+                ? 'bg-zinc-100 text-zinc-500'
+                : 'bg-zinc-50 text-zinc-700 border border-black/5'
           }`}>
             {texto}
           </span>
         </div>
 
         <div className="flex items-center gap-3 flex-1 justify-start">
-          <img src={p.teams.away.logo} className="w-8 h-8 object-contain shrink-0 drop-shadow-sm" alt="" />
-          <span className="text-gray-900 font-semibold text-sm text-left leading-tight group-hover:text-[#013535]">
+          <img src={p.teams.away.logo} className="w-8 h-8 object-contain shrink-0" alt="" />
+          <span className="text-zinc-600 font-bold text-sm text-left leading-tight group-hover:text-zinc-900 transition-colors">
             {p.teams.away.name}
           </span>
         </div>
@@ -164,17 +166,21 @@ function PartidoRow({ p, onSelect }) {
 
 function Skeleton() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-      {[...Array(4)].map((_, i) => (
-        <div key={i} className="glass-light rounded-3xl overflow-hidden animate-pulse flex flex-col">
-          <div className="px-5 py-4 glass-dark h-12" />
-          {[...Array(2)].map((_, j) => (
-            <div key={j} className="flex justify-between items-center px-5 py-5 border-b border-gray-200/50">
-              <div className="h-4 bg-gray-300 rounded w-1/4" />
-              <div className="h-8 bg-gray-300 rounded w-16" />
-              <div className="h-4 bg-gray-300 rounded w-1/4" />
+    <div className="max-w-4xl mx-auto w-full flex flex-col space-y-8">
+      {[...Array(2)].map((_, i) => (
+        <div key={i} className="stitch-card animate-pulse flex flex-col p-6">
+          <div className="flex flex-col flex-grow">
+            <div className="pb-4 border-b border-black/5 flex items-center">
+              <div className="h-6 w-24 bg-zinc-200 rounded" />
             </div>
-          ))}
+            {[...Array(2)].map((_, j) => (
+              <div key={j} className="flex justify-between items-center px-6 py-6 border-b border-black/5">
+                <div className="h-4 bg-zinc-100 rounded w-1/4" />
+                <div className="h-10 bg-zinc-200 rounded w-16" />
+                <div className="h-4 bg-zinc-100 rounded w-1/4" />
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>

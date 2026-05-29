@@ -44,11 +44,26 @@ function mapStatusShort(status) {
 }
 
 function normalizarPartido(m) {
+  let statusShort = mapStatusShort(m.status)
+  
+  // Sanity check: Si el partido empezó hace más de 4 horas, forzar a finalizado
+  // Esto soluciona el problema de partidos que quedan trabados en "EN VIVO" por la API
+  if (m.utcDate) {
+    const matchDate = new Date(m.utcDate)
+    const now = new Date()
+    const diffHours = (now - matchDate) / (1000 * 60 * 60)
+    
+    // Si pasaron más de 4 horas y sigue marcado como en curso, lo forzamos a FT
+    if (diffHours > 4 && ['1H', 'HT'].includes(statusShort)) {
+      statusShort = 'FT'
+    }
+  }
+
   return {
     fixture: {
       id:     m.id,
       date:   m.utcDate,
-      status: { short: mapStatusShort(m.status), elapsed: m.minute ?? null },
+      status: { short: statusShort, elapsed: m.minute ?? null },
     },
     league: {
       round:       m.matchday ? `Fecha ${m.matchday}` : (m.stage ?? 'Sin fecha'),

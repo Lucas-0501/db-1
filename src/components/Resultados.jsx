@@ -41,7 +41,7 @@ export default function Resultados({ competition, onSelectPartido }) {
 
   if (loading) return <Skeleton />
   if (error)   return <p className="text-red-600 text-center py-8 text-sm">{error}</p>
-  if (!partidos.length) return <p className="text-[#024a4a] text-center py-8 font-medium">Sin partidos disponibles.</p>
+  if (!partidos.length) return <p className="text-zinc-500 text-center py-10 font-bold">Sin partidos disponibles.</p>
 
   const porFecha = partidos.reduce((acc, p) => {
     const round = p.league.round ?? 'Sin fecha'
@@ -51,15 +51,16 @@ export default function Resultados({ competition, onSelectPartido }) {
   }, {})
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <h2 className="text-[#013535] font-bold text-lg px-1">{titulo}</h2>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {Object.entries(porFecha).map(([round, lista]) => (
-          <div key={round} className="glass-light rounded-3xl overflow-hidden shadow-lg flex flex-col">
-            <div className="px-5 py-3 glass-dark">
-              <h3 className="text-white font-bold text-sm uppercase tracking-wide">{round}</h3>
-            </div>
-            <div className="divide-y divide-gray-200/50 flex-grow">
+    <div className="space-y-8 animate-fade-in">
+      <h2 className="text-zinc-900 font-bold text-xl px-2">{titulo}</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto w-full">
+        {Object.entries(porFecha).map(([round, lista], i) => (
+          <div key={round} className="stitch-card flex flex-col p-6 animate-stagger-fade" style={{ animationDelay: `${i * 150}ms` }}>
+            <div className="flex flex-col flex-grow">
+              <div className="pb-4 border-b border-black/5">
+                <h3 className="text-zinc-900 font-bold text-sm uppercase tracking-widest">{round}</h3>
+              </div>
+              <div className="divide-y divide-black/5 flex-grow mt-2">
               {lista.map((p) => {
                 const { texto, vivo } = mapEstado(p.fixture.status.short, p.fixture.status.elapsed)
                 const golesLocal = p.goals.home ?? '-'
@@ -76,49 +77,50 @@ export default function Resultados({ competition, onSelectPartido }) {
                   <button
                     key={p.fixture.id}
                     onClick={() => onSelectPartido(p.fixture.id)}
-                    className="w-full px-5 py-4 hover:bg-white/40 transition-colors group flex flex-col items-center"
+                    className="w-full px-6 py-5 hover:bg-zinc-50 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:bg-zinc-100 group flex flex-col items-center"
                   >
-                    <div className="flex items-center justify-between gap-3 w-full">
+                    <div className="flex items-center justify-between gap-4 w-full">
                       <div className="flex items-center gap-3 flex-1 justify-end">
-                        <span className="text-gray-900 font-semibold text-sm text-right leading-tight group-hover:text-[#013535]">
+                        <span className="text-zinc-600 font-bold text-sm text-right leading-tight group-hover:text-zinc-900 transition-colors">
                           {p.teams.home.name}
                         </span>
-                        <img src={p.teams.home.logo} className="w-8 h-8 object-contain shrink-0 drop-shadow-sm" alt="" />
+                        <img src={p.teams.home.logo} className="w-8 h-8 object-contain shrink-0" alt="" />
                       </div>
 
                       <div className="flex flex-col items-center min-w-[90px] shrink-0">
                         {p.fixture.status.short === 'NS' ? (
-                          <span className="text-[#024a4a] text-sm font-bold">{hora}</span>
+                          <span className="text-zinc-400 text-sm font-bold tabular-nums">{hora}</span>
                         ) : (
-                          <span className="text-[#013535] font-black text-2xl tabular-nums tracking-tighter">
+                          <span className="text-zinc-900 font-black text-3xl tabular-nums tracking-tighter leading-none">
                             {golesLocal} – {golesVisit}
                           </span>
                         )}
-                        <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mt-1 shadow-sm ${
+                        <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full mt-2 ${
                           vivo
-                            ? 'bg-red-500 text-white animate-pulse'
+                            ? 'bg-emerald-50 text-emerald-600 border border-emerald-100 animate-pulse'
                             : p.fixture.status.short === 'FT'
-                              ? 'bg-gray-200 text-gray-700'
-                              : 'bg-[#013535] text-white'
+                              ? 'bg-zinc-100 text-zinc-500'
+                              : 'bg-zinc-50 text-zinc-700 border border-black/5'
                         }`}>
                           {texto}
                         </span>
                       </div>
 
                       <div className="flex items-center gap-3 flex-1 justify-start">
-                        <img src={p.teams.away.logo} className="w-8 h-8 object-contain shrink-0 drop-shadow-sm" alt="" />
-                        <span className="text-gray-900 font-semibold text-sm text-left leading-tight group-hover:text-[#013535]">
+                        <img src={p.teams.away.logo} className="w-8 h-8 object-contain shrink-0" alt="" />
+                        <span className="text-zinc-600 font-bold text-sm text-left leading-tight group-hover:text-zinc-900 transition-colors">
                           {p.teams.away.name}
                         </span>
                       </div>
                     </div>
 
-                    <p className="text-center text-gray-500 text-[11px] font-medium mt-3 bg-white/50 px-3 py-1 rounded-full">{fecha}</p>
+                    <p className="text-center text-zinc-400 text-[11px] font-bold mt-4 uppercase tracking-widest">{fecha}</p>
                   </button>
                 )
               })}
             </div>
           </div>
+        </div>
         ))}
       </div>
     </div>
@@ -127,20 +129,26 @@ export default function Resultados({ competition, onSelectPartido }) {
 
 function Skeleton() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl mx-auto w-full">
       {[...Array(2)].map((_, i) => (
-        <div key={i} className="glass-light rounded-3xl overflow-hidden shadow-lg animate-pulse flex flex-col">
-          <div className="px-5 py-4 glass-dark h-12" />
-          {[...Array(3)].map((_, j) => (
-            <div key={j} className="flex flex-col px-5 py-5 border-b border-gray-200/50">
-              <div className="flex justify-between items-center w-full mb-3">
-                <div className="h-4 bg-gray-300 rounded w-1/4" />
-                <div className="h-8 bg-gray-300 rounded w-16" />
-                <div className="h-4 bg-gray-300 rounded w-1/4" />
-              </div>
-              <div className="h-3 bg-gray-300 rounded w-20 self-center" />
+        <div key={i} className="stitch-card animate-pulse flex flex-col p-6">
+          <div className="flex flex-col flex-grow">
+            <div className="pb-4 border-b border-black/5 flex items-center">
+              <div className="h-4 bg-zinc-200 rounded w-1/4" />
             </div>
-          ))}
+            <div className="mt-2">
+              {[...Array(3)].map((_, j) => (
+                <div key={j} className="flex flex-col py-6 border-b border-black/5">
+                  <div className="flex justify-between items-center w-full mb-4">
+                    <div className="h-4 bg-zinc-100 rounded w-1/4" />
+                    <div className="h-10 bg-zinc-200 rounded w-16" />
+                    <div className="h-4 bg-zinc-100 rounded w-1/4" />
+                  </div>
+                  <div className="h-3 bg-zinc-100 rounded w-24 self-center mt-2" />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       ))}
     </div>

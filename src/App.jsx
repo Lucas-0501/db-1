@@ -18,6 +18,22 @@ const TABS = [
   { id: 'goleadores', label: 'Goleadores' },
 ]
 
+function Footer() {
+  return (
+    <footer className="mt-auto border-t border-white/40 bg-[#013535]/95 text-white">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+        <div>
+          <p className="font-bold text-lg leading-tight">FutScore</p>
+          <p className="text-sm text-teal-100/80">Resultados, estadisticas y predicciones en un solo lugar.</p>
+        </div>
+        <p className="text-xs text-teal-100/70">
+          Proyecto de Base de Datos - 2026
+        </p>
+      </div>
+    </footer>
+  )
+}
+
 export default function App() {
   const [competition, setCompetition] = useState(null)
   const [tab, setTab] = useState('posiciones')
@@ -64,9 +80,9 @@ export default function App() {
   const showAuth = requiresAuth && !user && !authLoading
 
   return (
-    <div className={`min-h-screen font-sans flex flex-col transition-colors duration-500 ${appMode === 'mundial' ? 'bg-black text-white selection:bg-[#00F0FF] mundial-theme' : 'bg-gradient-to-br from-[#E0F7FA] via-[#B2DFDB] to-[#80CBC4] text-gray-900 selection:bg-teal-300'}`}>
-      {/* ── Top Navigation Bar ── */}
-      <nav className={`py-3 px-4 sm:px-6 transition-all duration-500 z-50 sticky top-0 backdrop-blur-xl ${appMode === 'mundial' ? 'bg-black/80 text-white border-b border-zinc-800' : 'bg-[#013535]/95 text-white shadow-lg'}`}>
+    <div className={`min-h-screen font-sans flex flex-col transition-colors duration-500 ${appMode === 'mundial' ? 'bg-black text-white selection:bg-[#00F0FF] mundial-theme' : 'bg-[#F8F9FA] text-zinc-900 selection:bg-teal-300'}`}>
+      {/* ── Top Navigation Bar (Fluid Island) ── */}
+      <nav className={`py-3 px-4 sm:px-6 transition-all duration-500 z-50 sticky top-4 mx-auto w-11/12 max-w-5xl rounded-full backdrop-blur-2xl border ${appMode === 'mundial' ? 'bg-black/80 text-white border-white/10' : 'bg-[#013535]/95 text-white shadow-2xl border-white/10'}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between overflow-x-auto scrollbar-hide gap-4">
           
           <div className="flex gap-2 font-semibold text-sm items-center">
@@ -108,31 +124,30 @@ export default function App() {
 
       {/* ── Header (solo para Stats) ── */}
       {appMode === 'stats' && (
-        <header className="sticky top-0 z-40 w-full glass rounded-b-3xl mb-6 shadow-sm">
-          <div className="max-w-5xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <img src="/imagen-Photoroom.png" alt="FutScore Logo" className="w-14 h-14 object-contain drop-shadow-lg" />
-                <div>
-                  <h1 className="text-xl font-bold text-[#013535] leading-none tracking-tight">FutScore</h1>
-                  <p className="text-[#024a4a] text-xs font-medium mt-1">
-                    {competition ? 'Estadísticas de la liga' : 'Partidos en vivo y resultados'}
-                  </p>
-                </div>
-              </div>
+        <header className="w-full bg-transparent mb-12 mt-6">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
+            <div className="flex flex-col items-center justify-center mb-10">
+              <h1 className="text-4xl md:text-5xl font-bold text-zinc-500 uppercase tracking-widest flex items-center justify-center gap-0 mb-2">
+                FUT
+                <img src="/imagen-Photoroom.png" alt="FutScore Logo" className="w-10 h-10 md:w-12 md:h-12 object-contain bg-white rounded-[1rem] shadow-sm mx-3 z-10 border border-black/5 p-1" />
+                SCORE
+              </h1>
+              <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">
+                {competition ? 'Estadísticas de la liga' : 'Partidos en vivo y resultados'}
+              </p>
             </div>
 
             <SelectorLiga onSelect={seleccionar} selectedComp={competition} />
 
             {competition && (
-              <div className="flex gap-2 mt-2 pb-2 overflow-x-auto scrollbar-hide">
+              <div className="flex gap-3 mt-8 pb-2 overflow-x-auto scrollbar-hide justify-center w-full">
                 {TABS.map((t) => (
                   <button
                     key={t.id}
                     onClick={() => setTab(t.id)}
-                    className={`px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 shadow-sm ${tab === t.id
-                      ? 'bg-[#013535] text-white shadow-md'
-                      : 'bg-white/40 text-gray-700 hover:bg-white/60'
+                    className={`px-8 py-3 text-sm font-bold rounded-full transition-all duration-500 ease-spring active:scale-[0.95] ${tab === t.id
+                      ? 'bg-emerald-500 text-white shadow-[0_8px_16px_rgba(16,185,129,0.3)]'
+                      : 'bg-white text-zinc-500 border border-black/5 hover:bg-zinc-50 hover:text-zinc-900'
                       }`}
                   >
                     {t.label}
@@ -162,8 +177,8 @@ export default function App() {
                   {tab === 'goleadores' && <Goleadores competition={competition.code} />}
                 </div>
               ) : (
-                <div className="animate-fade-in">
-                  <h2 className="text-2xl font-bold text-[#013535] mb-4 px-2">Partidos Destacados</h2>
+                <div className="animate-fade-in max-w-4xl mx-auto w-full mt-4">
+                  <h2 className="text-lg font-bold text-zinc-500 uppercase tracking-widest mb-6 px-2 text-center">Partidos Destacados</h2>
                   <PartidosHoy onSelectPartido={setPartidoId} />
                 </div>
               )
@@ -184,6 +199,8 @@ export default function App() {
           onClose={() => setPartidoId(null)}
         />
       )}
+
+      {appMode !== 'mundial' && <Footer />}
     </div>
   )
 }
