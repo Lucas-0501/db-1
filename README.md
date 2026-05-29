@@ -101,6 +101,53 @@ erDiagram
    * **Relaciones (Foreign Keys):** Posee claves foráneas `usuario_id` y `partido_id` con comportamiento `ON DELETE CASCADE` (si se borra un usuario o un partido en el futuro, sus predicciones desaparecen para mantener la integridad referencial).
    * **Integridad (Voto Único):** Tiene una restricción de tabla compuesta `UNIQUE (usuario_id, partido_id)` en la base de datos para garantizar matemáticamente que un usuario no pueda votar dos veces por un mismo partido, bloqueando intentos de trampa desde el servidor.
 
+### Código DDL (Data Definition Language)
+
+```sql
+-- 1. Tabla de Usuarios (Jugadores del Prode)
+CREATE TABLE usuario (
+    id             UUID PRIMARY KEY, -- Se vincula con auth.users.id
+    username       VARCHAR(50) NOT NULL UNIQUE,
+    email          VARCHAR(150) NOT NULL UNIQUE,
+    fecha_registro TIMESTAMPTZ DEFAULT NOW(),
+    puntos_totales INT DEFAULT 0
+);
+
+-- 2. Tabla de Partidos (Fuente de la verdad)
+CREATE TABLE partido (
+    id                     SERIAL PRIMARY KEY,
+    api_fixture_id         INT UNIQUE NOT NULL, -- ID que viene de la API de futbol
+    liga                   VARCHAR(100),
+    equipo_local           VARCHAR(100) NOT NULL,
+    escudo_local           TEXT,
+    equipo_visitante       VARCHAR(100) NOT NULL,
+    escudo_visitante       TEXT,
+    goles_local_reales     SMALLINT, -- Nulo hasta que termine el partido
+    goles_visitante_reales SMALLINT,
+    fecha                  TIMESTAMPTZ NOT NULL,
+    estado                 VARCHAR(20) NOT NULL DEFAULT 'programado'
+                               CHECK (estado IN ('programado', 'en_curso', 'finalizado'))
+);
+
+-- 3. Tabla de Predicciones (El Prode de los usuarios)
+CREATE TABLE prediccion (
+    id                        SERIAL PRIMARY KEY,
+    usuario_id                UUID NOT NULL REFERENCES usuario(id) ON DELETE CASCADE,
+    partido_id                INT NOT NULL REFERENCES partido(id) ON DELETE CASCADE,
+    goles_local_predichos     SMALLINT NOT NULL,
+    goles_visitante_predichos SMALLINT NOT NULL,
+    puntos_obtenidos          SMALLINT DEFAULT 0,
+    fecha_prediccion          TIMESTAMPTZ DEFAULT NOW(),
+    -- Restricción clave: Un usuario no puede predecir dos veces el mismo partido
+    CONSTRAINT uq_usuario_partido UNIQUE (usuario_id, partido_id)
+);
+
+-- Índices para mejorar rendimiento de consultas
+CREATE INDEX idx_prediccion_usuario ON prediccion(usuario_id);
+CREATE INDEX idx_prediccion_partido ON prediccion(partido_id);
+CREATE INDEX idx_partido_estado     ON partido(estado);
+```
+
 ### Lógica de Negocio (Triggers y Vistas)
 
 Para cumplir con los requisitos de la materia, la lógica de asignación de puntos **NO** ocurre en el código frontend (JavaScript), sino directamente en el motor de la base de datos:
