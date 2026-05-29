@@ -7,20 +7,12 @@
 
 ---
 
-## 1. Presentación Comercial
+## 1. Presentación
 
-### ¿Qué problema resuelve?
-
-Actualmente, los fanáticos del fútbol utilizan múltiples aplicaciones para ver estadísticas y otras distintas para jugar torneos de predicciones (Prode) con sus amigos. Además, depender exclusivamente de APIs externas gratuitas suele traer problemas de límites de peticiones (Rate Limits) y dependencia total de servicios de terceros.
-
-### ¿Por qué existe y para quién es?
-
-**FutScore** unifica ambas necesidades en una única plataforma web premium. Está diseñada para fanáticos del fútbol que desean:
+**FutScore** Web Deportiva donde se podrá:
 
 1. Consultar resultados en vivo, tablas de posiciones y goleadores de las principales ligas europeas y sudamericanas.
 2. Participar de un juego interactivo de pronósticos deportivos (Prode), compitiendo en un ranking global.
-
-Esta aplicación soluciona el problema de la dependencia de APIs externas utilizando una **base de datos propia** que funciona como fuente de verdad para el sistema de predicciones y registro de usuarios, permitiendo que la lógica del juego (cálculo de puntos y rankings) se ejecute de manera eficiente, segura y sin límites de peticiones.
 
 ---
 
