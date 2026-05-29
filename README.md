@@ -35,11 +35,9 @@ Esta aplicación soluciona el problema de la dependencia de APIs externas utiliz
 
 ### Bitácora de Avance
 
-* **Semana 1:** Diseño de interfaz base y conexión con API externa.
-* **Semana 2:** Refactorización visual (*Glassmorphism*) y adaptación responsiva.
-* **Semana 3:** Diseño del Modelo Relacional (DER) para integrar el Prode.
-* **Semana 4:** Implementación de Base de Datos en Supabase (Tablas, Triggers, Vistas).
-* **Semana 5:** Integración Full-Stack (Auth, envío de predicciones y visualización de ranking global).
+* **Semana 1:** Diseño de interfaz base y conexión con API externa. Refactorización visual (*Glassmorphism*) y adaptación responsiva.
+* **Semana 2:** Diseño del Modelo Relacional (DER) para integrar el Prode. Implementación de Base de Datos en Supabase (Tablas, Triggers, Vistas).
+* **Semana 3:** Integración Full-Stack (Auth, envío de predicciones y visualización de ranking global).
 
 ---
 
