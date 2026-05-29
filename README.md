@@ -158,26 +158,17 @@ Para cumplir con los requisitos de la materia, la lógica de asignación de punt
 * Una cuenta gratuita en Supabase.
 * Una API Key gratuita de [football-data.org](https://www.football-data.org/).
 
-### Paso 1: Configurar la Base de Datos (Supabase)
+### Configurar el Entorno Local
 
-1. Crea un nuevo proyecto en Supabase.
-2. Ve a la sección **SQL Editor**.
-3. Copia el contenido del archivo `supabase/schema.sql` y ejecútalo. Esto creará todas las tablas, vistas y triggers necesarios.
-4. *(Opcional)* Copia el contenido de `supabase/seed.sql` y ejecútalo para poblar la base de datos con usuarios y partidos de prueba para la demostración.
-
-### Paso 2: Configurar el Entorno Local
-
-Crea un archivo llamado `.env` en la raíz del proyecto y agrega tus claves:
+Archivo `.env` en la raíz del proyecto con las siguientes claves:
 
 ```env
-VITE_FOOTBALL_DATA_KEY=tu_api_key_de_football_data
-VITE_SUPABASE_URL=tu_url_de_supabase
-VITE_SUPABASE_ANON_KEY=tu_anon_key_de_supabase
+VITE_FOOTBALL_DATA_KEY=
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
 ```
 
-### Paso 3: Ejecutar la aplicación
-
-Abre una terminal, navega a la carpeta del proyecto y ejecuta:
+### Ejecutar la aplicación
 
 ```bash
 npm install
@@ -185,4 +176,3 @@ npm run dev
 ```
 
 La aplicación estará disponible en `http://localhost:5173`.
-Para probar el flujo completo: Regístrate, ve a la pestaña "Jugar Prode", ingresa resultados, y verifica cómo se actualiza tu "Perfil" y el "Ranking Global". En la defensa, puedes editar el resultado de un partido directamente desde la base de datos de Supabase para mostrar cómo el Trigger recalcula todo el ranking automáticamente.
