@@ -39,7 +39,7 @@ El núcleo del proyecto gira en torno a cómo la base de datos gestiona el juego
 
 > [!NOTE]
 > **Documentación Expandida de la Base de Datos**:  
-Documento oficial detallado con el diccionario de datos columna por columna, justificación de índices de rendimiento y trazas de ejecución completas de los triggers en [DATABASE_DOC.md](./DATABASE_DOC.md).
+Documento detallado con el diccionario de datos columna por columna, justificación de índices de rendimiento y trazas de ejecución completas de los triggers en [DATABASE_DOC.md](./DATABASE_DOC.md).
 
 > [!NOTE]
 > **Documentación de Conexión y Endpoints**: Detalle de cómo se comunican las APIs, el flujo de sincronización de partidos mediante peticiones `fetch` y las operaciones CRUD con el SDK de Supabase, se encuentra en [CONEXION_API_SUPABASE.md](./CONEXION_API_SUPABASE.md).
