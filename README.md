@@ -39,7 +39,64 @@ Esta aplicación soluciona el problema de la dependencia de APIs externas utiliz
 
 ## 3. Arquitectura de Base de Datos (PostgreSQL)
 
-El núcleo del proyecto gira en torno a cómo la base de datos gestiona el juego del Prode de manera autónoma. 
+El núcleo del proyecto gira en torno a cómo la base de datos gestiona el juego del Prode de manera autónoma, integrándose con una API externa a través del frontend.
+
+### Arquitectura del Sistema
+
+```mermaid
+flowchart TB
+    %% Definición de Estilos
+    classDef react fill:#61dafb,stroke:#333,stroke-width:2px,color:black;
+    classDef netlify fill:#00c7b7,stroke:#333,stroke-width:2px,color:white;
+    classDef supabase fill:#3ecf8e,stroke:#333,stroke-width:2px,color:black;
+    classDef external fill:#ff9800,stroke:#333,stroke-width:2px,color:black;
+    classDef database fill:#f3f4f6,stroke:#333,stroke-width:1px,color:black;
+
+    User((Usuario)) --> NetlifyEdge
+
+    subgraph Cloud [Infraestructura en Netlify]
+        NetlifyEdge(Netlify):::netlify
+        
+        subgraph Frontend [Aplicación Cliente]
+            App(Frontend - React Vite):::react
+        end
+        
+        NetlifyEdge -->|Sirve estaticos HTML JS CSS| App
+    end
+
+    subgraph Externa [Proveedor de Datos Externo]
+        FootballAPI(Football-data.org API):::external
+    end
+    
+    subgraph BaaS [Supabase - Backend y DB]
+        SupabaseAuth(Supabase Auth - Sesiones):::supabase
+        
+        subgraph DB [PostgreSQL Database]
+            TablaUsuarios[(Tabla usuario)]:::database
+            TablaPartidos[(Tabla partido)]:::database
+            TablaPredicciones[(Tabla prediccion)]:::database
+            VistaRanking[(Vista vista_ranking)]:::database
+            
+            TablaUsuarios ---|1 a N| TablaPredicciones
+            TablaPartidos ---|1 a N| TablaPredicciones
+            
+            %% Conexiones de la vista
+            TablaPredicciones -.->|Suma de puntos| VistaRanking
+            TablaUsuarios -.->|Datos del jugador| VistaRanking
+        end
+        
+        SupabaseAuth -.->|Trigger Automatico| TablaUsuarios
+    end
+
+    %% Relaciones de Red
+    App -->|Peticiones a la API| FootballAPI
+    App -->|Inicia Sesion y Registro| SupabaseAuth
+    App -->|Lee y Escribe Predicciones| DB
+    
+    %% Flujos de datos específicos
+    App -.->|Inserta resultados de la API| TablaPartidos
+    App -.->|Consulta tabla de posiciones| VistaRanking
+```
 
 ### Diagrama de Entidad-Relación (DER)
 
