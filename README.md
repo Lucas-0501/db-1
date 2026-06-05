@@ -38,7 +38,10 @@
 El núcleo del proyecto gira en torno a cómo la base de datos gestiona el juego del Prode de manera autónoma, integrándose con una API externa a través del frontend.
 
 > [!NOTE]
-> **Documentación Expandida**: Se ha creado un documento oficial súper detallado con el diccionario de datos columna por columna, justificación de índices de rendimiento y trazas de ejecución completas de los triggers en [DATABASE_DOC.md](./DATABASE_DOC.md).
+> **Documentación Expandida de la Base de Datos**: Se ha creado un documento oficial súper detallado con el diccionario de datos columna por columna, justificación de índices de rendimiento y trazas de ejecución completas de los triggers en [DATABASE_DOC.md](./DATABASE_DOC.md).
+
+> [!NOTE]
+> **Documentación de Conexión y Endpoints**: Para conocer en detalle cómo se comunican las APIs, el flujo de sincronización de partidos mediante peticiones `fetch` y las operaciones CRUD con el SDK de Supabase, consulta el documento [CONEXION_API_SUPABASE.md](./CONEXION_API_SUPABASE.md).
 
 ### Arquitectura del Sistema
 
