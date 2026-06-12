@@ -43,7 +43,7 @@ function Footer() {
             Proyecto de Base de Datos — 2026
           </p>
           <a
-            href="https://github.com"
+            href="https://github.com/Lucas-0501/db-1"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-xs text-teal-100/60 hover:text-teal-300 transition-colors mt-3 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5"
