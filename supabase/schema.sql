@@ -1,5 +1,4 @@
--- SCHEMA: Fantasy / Prode de Fútbol - Base de Datos 1
--- Universidad de Belgrano - Ingeniería en Informática
+
 
 DROP VIEW IF EXISTS vista_ranking;
 DROP TABLE IF EXISTS prediccion, partido, usuario CASCADE;

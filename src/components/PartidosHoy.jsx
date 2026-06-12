@@ -38,7 +38,7 @@ export default function PartidosHoy({ onSelectPartido }) {
   })
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full min-h-[600px]">
       
       {/* Contenedor Izquierdo (Fondo Pixeles + Haaland) */}
       <div className="hidden xl:block absolute -left-[450px] top-0 w-[450px] h-[600px] z-0">
@@ -54,7 +54,7 @@ export default function PartidosHoy({ onSelectPartido }) {
         <img 
           src="/haaland.png" 
           alt="Haaland" 
-          className="absolute bottom-0 right-0 w-[400px] h-auto object-contain drop-shadow-2xl opacity-90 transition-transform hover:scale-105"
+          className="absolute bottom-16 right-0 w-[400px] h-auto object-contain drop-shadow-2xl opacity-90 transition-transform hover:scale-105"
           style={{ 
             WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', 
             maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)' 
@@ -101,7 +101,7 @@ export default function PartidosHoy({ onSelectPartido }) {
         <img 
           src="/mbappe.png" 
           alt="Mbappe" 
-          className="absolute bottom-0 left-0 w-[350px] h-auto object-contain drop-shadow-2xl opacity-90 transition-transform hover:scale-105"
+          className="absolute bottom-16 left-0 w-[350px] h-auto object-contain drop-shadow-2xl opacity-90 transition-transform hover:scale-105"
           style={{ 
             WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', 
             maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)' 
