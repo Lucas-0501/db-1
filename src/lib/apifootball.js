@@ -107,10 +107,35 @@ export async function getMatchesHoy() {
   const fDesde = ayer.toISOString().split('T')[0]
   const fHasta = manana.toISOString().split('T')[0]
 
-  const data = await apiFetch(`/matches?dateFrom=${fDesde}&dateTo=${fHasta}`)
+  let data
+  let dataWC
+  
+  try {
+    const results = await Promise.all([
+      apiFetch(`/matches?dateFrom=${fDesde}&dateTo=${fHasta}`),
+      apiFetch(`/competitions/WC/matches`).catch(() => ({ matches: [] }))
+    ])
+    data = results[0]
+    dataWC = results[1]
+  } catch (error) {
+    throw error
+  }
 
-  // Devolvemos todos (ayer, hoy y mañana) para que la pantalla no quede vacía
-  return data.matches.map(normalizarPartido)
+  // Devolvemos todos (ayer, hoy y mañana)
+  const matchesNormalizados = data.matches.map(normalizarPartido)
+
+  // Agregar la final y el 3er puesto del mundial si no están
+  if (dataWC && dataWC.matches) {
+    const wcFinals = dataWC.matches.filter(m => m.stage === 'FINAL' || m.stage === 'THIRD_PLACE')
+    wcFinals.forEach(wcf => {
+      const isIncluded = matchesNormalizados.find(m => m.fixture.id === wcf.id)
+      if (!isIncluded) {
+        matchesNormalizados.push(normalizarPartido(wcf))
+      }
+    })
+  }
+
+  return matchesNormalizados
 }
 
 export async function getAllMatches(competition) {
