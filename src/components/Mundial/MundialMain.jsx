@@ -129,9 +129,9 @@ export default function MundialMain({ user }) {
 
       {/* VISTAS: PRODE / RANKING */}
       {view !== 'home' && (
-        <div className="flex-1 flex flex-col z-10 animate-fade-in w-full max-w-5xl mx-auto">
+        <div className="flex-1 flex flex-col z-10 animate-fade-in w-full">
           {/* Header interior */}
-          <div className="flex flex-col sm:flex-row items-center justify-between mb-8 pb-4 border-b border-zinc-800 pt-4 gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-8 pb-4 border-b border-zinc-800 pt-4 gap-4 max-w-5xl mx-auto w-full px-4">
             <button
               onClick={() => setView('home')}
               className="flex items-center gap-2 text-zinc-400 font-bold hover:text-white transition-colors uppercase tracking-widest text-sm bg-white/5 px-4 py-2 rounded-lg"
@@ -158,8 +158,8 @@ export default function MundialMain({ user }) {
           </div>
 
           {/* Contenedor dinámico */}
-          <div className="flex-1 overflow-y-auto scrollbar-hide pb-20">
-            {view === 'prode' ? <MundialProde user={user} /> : <MundialRanking />}
+          <div className="flex-1 overflow-y-auto scrollbar-hide pb-20 w-full">
+            {view === 'prode' ? <MundialProde user={user} /> : <div className="max-w-5xl mx-auto w-full px-4"><MundialRanking /></div>}
           </div>
         </div>
       )}

@@ -1,14 +1,18 @@
 import { useState, useEffect, useMemo } from 'react'
 import { getPartidosMundial, guardarPrediccion, sincronizarPartidos } from '../../lib/supabase'
 import { getStandings, getAllMatches } from '../../lib/apifootball'
+import TournamentBracket from './TournamentBracket'
+import PredictionModal from './PredictionModal'
 
 export default function MundialProde({ user }) {
   const [partidos, setPartidos] = useState([])
   const [gruposOriginales, setGruposOriginales] = useState([])
+  const [partidosApiData, setPartidosApiData] = useState([])
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState(null)
   const [inputs, setInputs] = useState({})
   const [syncing, setSyncing] = useState(false)
+  const [selectedMatch, setSelectedMatch] = useState(null)
 
   useEffect(() => {
     cargarDatos()
@@ -17,13 +21,15 @@ export default function MundialProde({ user }) {
   async function cargarDatos() {
     setLoading(true)
     try {
-      const [dataPartidos, dataStandings] = await Promise.all([
+      const [dataPartidos, dataStandings, dataApi] = await Promise.all([
         getPartidosMundial(user.id),
-        getStandings('WC')
+        getStandings('WC'),
+        getAllMatches('WC')
       ])
       
       setPartidos(dataPartidos)
       setGruposOriginales(dataStandings)
+      setPartidosApiData(dataApi)
       
       const initialInputs = {}
       dataPartidos.forEach(p => {
@@ -68,6 +74,20 @@ export default function MundialProde({ user }) {
       setPartidos(dataPartidos)
     } catch (e) {
       alert("Error al guardar predicción")
+    } finally {
+      setSavingId(null)
+    }
+  }
+
+  async function handleModalSave(partidoId, local, visitante) {
+    setSavingId(partidoId)
+    try {
+      await guardarPrediccion(user.id, partidoId, parseInt(local), parseInt(visitante))
+      const dataPartidos = await getPartidosMundial(user.id)
+      setPartidos(dataPartidos)
+    } catch (e) {
+      alert("Error al guardar predicción")
+      throw e
     } finally {
       setSavingId(null)
     }
@@ -157,8 +177,9 @@ export default function MundialProde({ user }) {
   const partidosAsignados = new Set()
 
   return (
-    <div className="animate-fade-in relative z-20">
-      <div className="mb-8 px-4 md:px-0">
+    <div className="animate-fade-in relative z-20 w-full">
+      <div className="max-w-5xl mx-auto w-full px-4 md:px-0">
+        <div className="mb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div>
             <h3 className="text-3xl font-black text-white tracking-tight uppercase">Predicciones y Grupos</h3>
@@ -361,11 +382,57 @@ export default function MundialProde({ user }) {
           )
         })
       )}
+      </div> {/* Fin del wrapper max-w-5xl */}
       
-      {/* Otros Partidos (Fases Finales o no agrupados) */}
-      {partidos.length > 0 && partidos.filter(p => !partidosAsignados.has(p.id)).length > 0 && (
-         // Se podría renderizar aquí si hay octavos de final, etc.
-         null
+      {/* Fases Eliminatorias (Bracket) */}
+      {(() => {
+        const partidosPlayoffs = partidos.filter(p => !partidosAsignados.has(p.id));
+        if (partidosPlayoffs.length === 0) return null;
+
+        // Agrupar por ronda
+        const partidosPorRonda = {};
+        partidosPlayoffs.forEach(p => {
+          const apiMatch = partidosApiData.find(a => a.fixture.id === p.api_fixture_id);
+          const stage = apiMatch?.league?.round ?? 'FINAL';
+          
+          if (!partidosPorRonda[stage]) partidosPorRonda[stage] = [];
+          partidosPorRonda[stage].push(p);
+        });
+
+        // Crear mapa de predicciones para el bracket { matchId: { local, visitante } }
+        const userPredictions = {}
+        partidosPlayoffs.forEach(p => {
+           if (p.prediccion_usuario) {
+              userPredictions[p.id] = {
+                 local: p.prediccion_usuario.goles_local_predichos,
+                 visitante: p.prediccion_usuario.goles_visitante_predichos
+              }
+           }
+        })
+
+        return (
+          <div className="mt-16 w-full max-w-[1920px] mx-auto px-4">
+            <h3 className="text-3xl font-black text-white tracking-tight uppercase mb-8 border-t border-zinc-800 pt-8 max-w-5xl mx-auto">
+              Fases Eliminatorias
+            </h3>
+            <TournamentBracket 
+              partidosPorRonda={partidosPorRonda} 
+              onMatchClick={(match) => setSelectedMatch(match)}
+              userPredictions={userPredictions}
+            />
+          </div>
+        )
+      })()}
+
+      {/* Modal de Predicción */}
+      {selectedMatch && (
+        <PredictionModal 
+          match={selectedMatch}
+          initialLocal={selectedMatch.prediccion_usuario?.goles_local_predichos}
+          initialVisitante={selectedMatch.prediccion_usuario?.goles_visitante_predichos}
+          onClose={() => setSelectedMatch(null)}
+          onSave={handleModalSave}
+        />
       )}
     </div>
   )
